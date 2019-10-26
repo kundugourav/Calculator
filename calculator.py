@@ -40,11 +40,29 @@ def double_star():
         return demo
     else:
         equation.set(expression)
+        return expression
 def empty_expression():
     global expression
     if expression == "" or expression=="0.0":
         expression = "0"
-
+def single_dot():
+    global expression
+    pos = -1
+    if '+' in expression or '-' in expression or '*' in expression or '/' in expression or '^' in expression:
+        for i in range(-1, -len(expression) - 1, -1):
+            if expression[i] in ['+', '-', '/', '*', '^']:
+                pos = i
+                break
+        string = expression[pos + len(expression) + 1:len(expression)]
+        if '.' in string:
+            pass
+        else:
+            expression += '.'
+    else:
+        if '.' in expression:
+            pass
+        else:
+            expression += '.'
 #==================== binding buttons keyboard ====================
 def key_1(event):
     global expression
@@ -223,15 +241,14 @@ def key_delete(event):
 def key_dot(event):
     global expression
     empty_expression()
-    fetch = entry.get()
-    last_char = fetch[-1:]
+    last_char = expression[-1:]
     if last_char in ['+','-','/','*','^']:
         expression=expression+"0."
         double_star()
     if expression[-1:] == ".":
         double_star()
     else:
-        expression = expression + "."
+        single_dot()
         double_star()
 def key_backspace(event):
     global expression
@@ -248,7 +265,7 @@ def key_backspace(event):
             if expression[-2:] == "0." and len(expression) == 2:
                 expression = expression[0:len(expression) - 2]
                 equation.set(expression + '0')
-            elif expression[-2:] == "0.":
+            elif expression[-2:] == "0." and expression[-3:-2] in ['+', '-', '*', '/', '^']:
                 expression = expression[0:len(expression) - 2]
                 double_star()
             else:
@@ -296,7 +313,10 @@ def press_operator(operator):
     if last_char in ['+','-','/','.','*']:
         pass
     else:
-        expression = expression + str(operator)
+        if operator == '.':
+            single_dot()
+        else:
+            expression = expression + str(operator)
         double_star()
 def root_over():
     global expression
@@ -376,7 +396,7 @@ def delete():
             if expression[-2:] == "0." and len(expression) == 2:
                 expression=expression[0:len(expression) - 2]
                 equation.set(expression+'0')
-            elif expression[-2:] == "0.":
+            elif expression[-2:] == "0." and expression[-3:-2] in ['+', '-', '*', '/', '^']:
                 expression = expression[0:len(expression) - 2]
                 double_star()
             else:
@@ -395,96 +415,97 @@ def change_sign():
         double_star()
         return
 
-root=Tk()
+if __name__=="__main__":
+    root=Tk()
 
-root.title("Calculator")
-# root.iconbitmap(r'calc.ico')
-root.geometry("352x468+500+180")
-root.resizable(width=False, height=False)
+    root.title("Calculator")
+    # root.iconbitmap(r'calc.ico')
+    root.geometry("352x468+500+180")
+    root.resizable(width=False, height=False)
 
-root.bind("<Key-1>",key_1)
-root.bind("<Key-2>", key_2)
-root.bind("<Key-3>", key_3)
-root.bind("<Key-4>", key_4)
-root.bind("<Key-5>", key_5)
-root.bind("<Key-6>", key_6)
-root.bind("<Key-7>", key_7)
-root.bind("<Key-8>", key_8)
-root.bind("<Key-9>", key_9)
-root.bind("<Key-0>", key_0)
-root.bind("<Key-plus>", key_plus)
-root.bind("<Key-minus>", key_minus)
-root.bind("<Key-asterisk>", key_multiple)
-root.bind("<Key-slash>", key_divide)
-root.bind("<Return>", key_enter)
-root.bind("<BackSpace>", key_backspace)
-root.bind("<.>", key_dot)
-root.bind("<Delete>", key_delete)
+    root.bind("<Key-1>",key_1)
+    root.bind("<Key-2>", key_2)
+    root.bind("<Key-3>", key_3)
+    root.bind("<Key-4>", key_4)
+    root.bind("<Key-5>", key_5)
+    root.bind("<Key-6>", key_6)
+    root.bind("<Key-7>", key_7)
+    root.bind("<Key-8>", key_8)
+    root.bind("<Key-9>", key_9)
+    root.bind("<Key-0>", key_0)
+    root.bind("<Key-plus>", key_plus)
+    root.bind("<Key-minus>", key_minus)
+    root.bind("<Key-asterisk>", key_multiple)
+    root.bind("<Key-slash>", key_divide)
+    root.bind("<Return>", key_enter)
+    root.bind("<BackSpace>", key_backspace)
+    root.bind("<.>", key_dot)
+    root.bind("<Delete>", key_delete)
 
-equation=StringVar()
+    equation=StringVar()
 
-#==================== row 0 ====================
-entry=Entry(root,font='arial 20 bold',bg='gray',fg='black',bd=25,justify=RIGHT,textvariable=equation,state=DISABLED)
-equation.set("0")
-entry.grid(row=0,columnspan=4)
+    #==================== row 0 ====================
+    entry=Entry(root,font='arial 20 bold',bg='gray',fg='black',bd=25,justify=RIGHT,textvariable=equation,state=DISABLED)
+    equation.set("0")
+    entry.grid(row=0,columnspan=4)
 
-#==================== row 1 ====================
-squareroot=Button(root,text="√",font='arial 15',bg='dark gray',padx=30,pady=10,bd=5,command=root_over)
-squareroot.grid(row=1,column=0,columnspan=1)
-dividebyx=Button(root,text="1/x",font='arial 15',bg='dark gray',padx=24,pady=10,bd=5,command=onedividebyx)
-dividebyx.grid(row=1,column=1,columnspan=1)
-wholesquare=Button(root,text="x²",font='arial 15',bg='dark gray',padx=26,pady=10,bd=5,command=square)
-wholesquare.grid(row=1,column=2,columnspan=1)
-power=Button(root,text="^",font='arial 15',bg='dark gray',padx=20,pady=10,bd=5,command=lambda: press_operator("**"))
-power.grid(row=1,column=3,columnspan=1)
+    #==================== row 1 ====================
+    squareroot=Button(root,text="√",font='arial 15',bg='dark gray',padx=30,pady=10,bd=5,command=root_over)
+    squareroot.grid(row=1,column=0,columnspan=1)
+    dividebyx=Button(root,text="1/x",font='arial 15',bg='dark gray',padx=24,pady=10,bd=5,command=onedividebyx)
+    dividebyx.grid(row=1,column=1,columnspan=1)
+    wholesquare=Button(root,text="x²",font='arial 15',bg='dark gray',padx=26,pady=10,bd=5,command=square)
+    wholesquare.grid(row=1,column=2,columnspan=1)
+    power=Button(root,text="^",font='arial 15',bg='dark gray',padx=20,pady=10,bd=5,command=lambda: press_operator("**"))
+    power.grid(row=1,column=3,columnspan=1)
 
-#==================== row 2 ====================
-empty=Button(root,text="+/-",font='arial 15',bg='light gray',padx=23,pady=10,bd=5,command=change_sign)
-empty.grid(row=2,column=0,columnspan=1)
-clear=Button(root,text="C",font='arial 15',bg='light gray',padx=30,pady=10,bd=5,command=clear)
-clear.grid(row=2,column=1,columnspan=1)
-deletebutton=Button(root,text="DEL",font='arial 15',bg='light gray',padx=16,pady=10,bd=5,command=delete)
-deletebutton.grid(row=2,column=2,columnspan=1)
-division=Button(root,text="/",font='arial 15',bg='dark gray',padx=20,pady=10,bd=5,command=lambda: press_operator("/"))
-division.grid(row=2,column=3,columnspan=1)
+    #==================== row 2 ====================
+    empty=Button(root,text="+/-",font='arial 15',bg='light gray',padx=23,pady=10,bd=5,command=change_sign)
+    empty.grid(row=2,column=0,columnspan=1)
+    clear=Button(root,text="C",font='arial 15',bg='light gray',padx=30,pady=10,bd=5,command=clear)
+    clear.grid(row=2,column=1,columnspan=1)
+    deletebutton=Button(root,text="DEL",font='arial 15',bg='light gray',padx=16,pady=10,bd=5,command=delete)
+    deletebutton.grid(row=2,column=2,columnspan=1)
+    division=Button(root,text="/",font='arial 15',bg='dark gray',padx=20,pady=10,bd=5,command=lambda: press_operator("/"))
+    division.grid(row=2,column=3,columnspan=1)
 
-#==================== row 3 ====================
-button7=Button(root,text="7",font='arial 15',bg='light gray',padx=30,pady=10,bd=5,command=lambda: press(7))
-button7.grid(row=3,column=0,columnspan=1)
-button8=Button(root,text="8",font='arial 15',bg='light gray',padx=30,pady=10,bd=5,command=lambda: press(8))
-button8.grid(row=3,column=1,columnspan=1)
-button9=Button(root,text="9",font='arial 15',bg='light gray',padx=30,pady=10,bd=5,command=lambda: press(9))
-button9.grid(row=3,column=2,columnspan=1)
-multiple=Button(root,text="*",font='arial 15',bg='dark gray',padx=20,pady=10,bd=5,command=lambda: press_operator("*"))
-multiple.grid(row=3,column=3,columnspan=1)
+    #==================== row 3 ====================
+    button7=Button(root,text="7",font='arial 15',bg='light gray',padx=30,pady=10,bd=5,command=lambda: press(7))
+    button7.grid(row=3,column=0,columnspan=1)
+    button8=Button(root,text="8",font='arial 15',bg='light gray',padx=30,pady=10,bd=5,command=lambda: press(8))
+    button8.grid(row=3,column=1,columnspan=1)
+    button9=Button(root,text="9",font='arial 15',bg='light gray',padx=30,pady=10,bd=5,command=lambda: press(9))
+    button9.grid(row=3,column=2,columnspan=1)
+    multiple=Button(root,text="*",font='arial 15',bg='dark gray',padx=20,pady=10,bd=5,command=lambda: press_operator("*"))
+    multiple.grid(row=3,column=3,columnspan=1)
 
-#==================== row 4 ====================
-button4=Button(root,text="4",font='arial 15',bg='light gray',padx=30,pady=10,bd=5,command=lambda: press(4))
-button4.grid(row=4,column=0,columnspan=1)
-button5=Button(root,text="5",font='arial 15',bg='light gray',padx=30,pady=10,bd=5,command=lambda: press(5))
-button5.grid(row=4,column=1,columnspan=1)
-button6=Button(root,text="6",font='arial 15',bg='light gray',padx=30,pady=10,bd=5,command=lambda: press(6))
-button6.grid(row=4,column=2,columnspan=1)
-minus=Button(root,text="-",font='arial 15',bg='dark gray',padx=20,pady=10,bd=5,command=lambda: press_operator("-"))
-minus.grid(row=4,column=3,columnspan=1)
+    #==================== row 4 ====================
+    button4=Button(root,text="4",font='arial 15',bg='light gray',padx=30,pady=10,bd=5,command=lambda: press(4))
+    button4.grid(row=4,column=0,columnspan=1)
+    button5=Button(root,text="5",font='arial 15',bg='light gray',padx=30,pady=10,bd=5,command=lambda: press(5))
+    button5.grid(row=4,column=1,columnspan=1)
+    button6=Button(root,text="6",font='arial 15',bg='light gray',padx=30,pady=10,bd=5,command=lambda: press(6))
+    button6.grid(row=4,column=2,columnspan=1)
+    minus=Button(root,text="-",font='arial 15',bg='dark gray',padx=20,pady=10,bd=5,command=lambda: press_operator("-"))
+    minus.grid(row=4,column=3,columnspan=1)
 
-#==================== row 5 ====================
-button1=Button(root,text="1",font='arial 15',bg='light gray',padx=30,pady=10,bd=5,command=lambda: press(1))
-button1.grid(row=5,column=0,columnspan=1)
-button2=Button(root,text="2",font='arial 15',bg='light gray',padx=30,pady=10,bd=5,command=lambda: press(2))
-button2.grid(row=5,column=1,columnspan=1)
-button3=Button(root,text="3",font='arial 15',bg='light gray',padx=30,pady=10,bd=5,command=lambda: press(3))
-button3.grid(row=5,column=2,columnspan=1)
-# ======== grid of plus operator occupies 5th and 6th row =============
-plus=Button(root,text="+",font='arial 15',bg='dark gray',padx=18,pady=42,bd=5,command=lambda: press_operator("+"))
-plus.grid(row=5,column=3,columnspan=1,rowspan=2)
+    #==================== row 5 ====================
+    button1=Button(root,text="1",font='arial 15',bg='light gray',padx=30,pady=10,bd=5,command=lambda: press(1))
+    button1.grid(row=5,column=0,columnspan=1)
+    button2=Button(root,text="2",font='arial 15',bg='light gray',padx=30,pady=10,bd=5,command=lambda: press(2))
+    button2.grid(row=5,column=1,columnspan=1)
+    button3=Button(root,text="3",font='arial 15',bg='light gray',padx=30,pady=10,bd=5,command=lambda: press(3))
+    button3.grid(row=5,column=2,columnspan=1)
+    # ======== grid of plus operator occupies 5th and 6th row =============
+    plus=Button(root,text="+",font='arial 15',bg='dark gray',padx=18,pady=42,bd=5,command=lambda: press_operator("+"))
+    plus.grid(row=5,column=3,columnspan=1,rowspan=2)
 
-#==================== row 6 ====================
-dot=Button(root,text=" .",font='arial 15',padx=30,pady=10,bd=5,command=lambda: press_operator("."))
-dot.grid(row=6,column=0,columnspan=1)
-button0=Button(root,text="0",font='arial 15',bg='light gray',padx=30,pady=10,bd=5,command=lambda: press(0))
-button0.grid(row=6,column=1,columnspan=1)
-equals=Button(root,text="=",font='arial 15',padx=30,pady=10,bd=5,command=equal)
-equals.grid(row=6,column=2,columnspan=1)
+    #==================== row 6 ====================
+    dot=Button(root,text=" .",font='arial 15',padx=30,pady=10,bd=5,command=lambda: press_operator("."))
+    dot.grid(row=6,column=0,columnspan=1)
+    button0=Button(root,text="0",font='arial 15',bg='light gray',padx=30,pady=10,bd=5,command=lambda: press(0))
+    button0.grid(row=6,column=1,columnspan=1)
+    equals=Button(root,text="=",font='arial 15',padx=30,pady=10,bd=5,command=equal)
+    equals.grid(row=6,column=2,columnspan=1)
 
-root.mainloop()
+    root.mainloop()
