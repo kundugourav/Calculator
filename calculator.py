@@ -72,7 +72,10 @@ def key_1(event):
         equation.set(demo+str(1))
         expression = expression + str(1)
     else:
-        expression=expression+str(1)
+        if expression[-2:-1] in ['+', '-', '/', '*'] and expression[-1:] == '0':
+            expression = expression[0:len(expression) - 1] + str(1)
+        else:
+            expression = expression + str(1)
         double_star()
 def key_2(event):
     global expression
@@ -82,7 +85,10 @@ def key_2(event):
         equation.set(demo + str(2))
         expression = expression + str(2)
     else:
-        expression = expression + str(2)
+        if expression[-2:-1] in ['+', '-', '/', '*'] and expression[-1:] == '0':
+            expression = expression[0:len(expression) - 1] + str(2)
+        else:
+            expression = expression + str(2)
         double_star()
 def key_3(event):
     global expression
@@ -92,7 +98,10 @@ def key_3(event):
         equation.set(demo + str(3))
         expression = expression + str(3)
     else:
-        expression = expression + str(3)
+        if expression[-2:-1] in ['+', '-', '/', '*'] and expression[-1:] == '0':
+            expression = expression[0:len(expression) - 1] + str(3)
+        else:
+            expression = expression + str(3)
         double_star()
 def key_4(event):
     global expression
@@ -102,7 +111,10 @@ def key_4(event):
         equation.set(demo + str(4))
         expression = expression + str(4)
     else:
-        expression = expression + str(4)
+        if expression[-2:-1] in ['+', '-', '/', '*'] and expression[-1:] == '0':
+            expression = expression[0:len(expression) - 1] + str(4)
+        else:
+            expression = expression + str(4)
         double_star()
 def key_5(event):
     global expression
@@ -112,7 +124,10 @@ def key_5(event):
         equation.set(demo + str(5))
         expression = expression + str(5)
     else:
-        expression = expression + str(5)
+        if expression[-2:-1] in ['+', '-', '/', '*'] and expression[-1:] == '0':
+            expression = expression[0:len(expression) - 1] + str(5)
+        else:
+            expression = expression + str(5)
         double_star()
 def key_6(event):
     global expression
@@ -122,7 +137,10 @@ def key_6(event):
         equation.set(demo + str(6))
         expression = expression + str(6)
     else:
-        expression = expression + str(6)
+        if expression[-2:-1] in ['+', '-', '/', '*'] and expression[-1:] == '0':
+            expression = expression[0:len(expression) - 1] + str(6)
+        else:
+            expression = expression + str(6)
         double_star()
 def key_7(event):
     global expression
@@ -132,7 +150,10 @@ def key_7(event):
         equation.set(demo + str(7))
         expression = expression + str(7)
     else:
-        expression = expression + str(7)
+        if expression[-2:-1] in ['+', '-', '/', '*'] and expression[-1:] == '0':
+            expression = expression[0:len(expression) - 1] + str(7)
+        else:
+            expression = expression + str(7)
         double_star()
 def key_8(event):
     global expression
@@ -142,7 +163,10 @@ def key_8(event):
         equation.set(demo + str(8))
         expression = expression + str(8)
     else:
-        expression = expression + str(8)
+        if expression[-2:-1] in ['+', '-', '/', '*'] and expression[-1:] == '0':
+            expression = expression[0:len(expression) - 1] + str(8)
+        else:
+            expression = expression + str(8)
         double_star()
 def key_9(event):
     global expression
@@ -152,7 +176,10 @@ def key_9(event):
         equation.set(demo + str(9))
         expression = expression + str(9)
     else:
-        expression = expression + str(9)
+        if expression[-2:-1] in ['+', '-', '/', '*'] and expression[-1:] == '0':
+            expression = expression[0:len(expression) - 1] + str(9)
+        else:
+            expression = expression + str(9)
         double_star()
 def key_0(event):
     global expression
@@ -162,7 +189,10 @@ def key_0(event):
         equation.set(demo + str(0))
         expression = expression + str(0)
     else:
-        expression = expression + str(0)
+        if expression[-2:-1] in ['+', '-', '/', '*'] and expression[-1:] == '0':
+            pass
+        else:
+            expression = expression + str(0)
         double_star()
 def key_plus(event):
     global expression
@@ -357,7 +387,12 @@ def press(num):
         equation.set(demo+str(num))
         expression = expression + str(num)
     else:
-        expression=expression+str(num)
+        if expression[-2:-1] in ['+', '-', '/', '*'] and expression[-1:] == '0' and num == 0:
+            pass
+        elif expression[-2:-1] in ['+', '-', '/', '*'] and expression[-1:] == '0' and num in [1, 2, 3, 4, 5, 6, 7, 8,9]:
+            expression = expression[0:len(expression) - 1] + str(num)
+        else:
+            expression = expression + str(num)
         double_star()
 def equal():
     try:
