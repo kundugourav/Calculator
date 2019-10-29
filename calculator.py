@@ -250,6 +250,8 @@ def key_enter(event):
     try:
         global expression
         total = str(eval(expression))
+        if total[-2:] == '.0':
+            total = total[0:len(total) - 2]
         equation.set(total)
         expression = total
     except ZeroDivisionError:
@@ -370,12 +372,13 @@ def square():
     global expression
     empty_expression()
     try:
-        expression=float(expression)
-        expression=math.pow(expression,2)
-        if expression==0.0:
-            expression='0'
+        expression = float(expression)
+        expression = math.pow(expression, 2)
+        expression = str(expression)
+        if expression[-2:] == '.0':
+            expression = expression[0:len(expression) - 2]
         equation.set(expression)
-        expression=str(expression)
+        expression = str(expression)
     except Exception:
         equation.set("Invalid Input")
         expression=""
@@ -398,6 +401,8 @@ def equal():
     try:
         global expression
         total=str(eval(expression))
+        if total[-2:] == '.0':
+            total = total[0:len(total) - 2]
         equation.set(total)
         expression=total
     except ZeroDivisionError:
